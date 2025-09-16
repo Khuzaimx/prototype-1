@@ -1,0 +1,83 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}Dashboard - ClassAlarm{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <!-- Welcome Section -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome, {{ user.email }}!</h1>
+        <p class="text-gray-600">Role: {{ user.role|upper }}</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% if user.is_cr %}
+            <a href="{% url 'cr_panel' %}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">📝 CR Panel</h3>
+                <p class="text-gray-600">Create and manage classes</p>
+            </a>
+        {% endif %}
+        
+        <a href="{% url 'student_panel' %}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">📚 Student Panel</h3>
+            <p class="text-gray-600">View today's classes</p>
+        </a>
+        
+        {% if user.is_staff %}
+            <a href="{% url 'admin_panel' %}" class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">⚙️ Admin Panel</h3>
+                <p class="text-gray-600">Manage CR assignments</p>
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Today's Classes -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Today's Classes</h2>
+        {% if todays_classes %}
+            <div class="space-y-3">
+                {% for class in todays_classes %}
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h3 class="text-lg font-medium text-gray-900">{{ class.get_subject_display }}</h3>
+                        <div class="text-sm text-gray-600 mt-1">
+                            <span class="inline-flex items-center">📍 {{ class.get_venue_display }}</span>
+                            <span class="mx-2">•</span>
+                            <span class="inline-flex items-center">🕐 {{ class.time }}</span>
+                        </div>
+                        {% if class.note %}
+                            <p class="text-sm text-gray-500 mt-2 italic">{{ class.note }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 text-center py-8">No classes today! 🎉</p>
+        {% endif %}
+    </div>
+
+    <!-- User's Classes (if CR) -->
+    {% if user.is_cr and user_classes %}
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Your Classes</h2>
+            <div class="space-y-3">
+                {% for class in user_classes %}
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h3 class="text-lg font-medium text-gray-900">{{ class.get_subject_display }}</h3>
+                        <div class="text-sm text-gray-600 mt-1">
+                            <span class="inline-flex items-center">📍 {{ class.get_venue_display }}</span>
+                            <span class="mx-2">•</span>
+                            <span class="inline-flex items-center">📅 {{ class.date }}</span>
+                            <span class="mx-2">•</span>
+                            <span class="inline-flex items-center">🕐 {{ class.time }}</span>
+                        </div>
+                        {% if class.note %}
+                            <p class="text-sm text-gray-500 mt-2 italic">{{ class.note }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

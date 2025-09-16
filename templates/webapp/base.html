@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ClassAlarm{% endblock %}</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Simple Navigation -->
+    <nav class="bg-blue-600 text-white">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="{% url 'home' %}" class="text-xl font-bold">📚 ClassAlarm</a>
+                {% if user.is_authenticated %}
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm">{{ user.email }}</span>
+                        <a href="{% url 'logout' %}" class="text-sm hover:underline">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="flex items-center gap-4">
+                        <a href="{% url 'login' %}" class="text-sm hover:underline">Login</a>
+                        <a href="{% url 'register' %}" class="text-sm bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100">Sign Up</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} p-3 rounded-md mb-2">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="bg-gray-100 mt-12">
+        <div class="max-w-4xl mx-auto px-4 py-4 text-center text-gray-600 text-sm">
+            <p>📚 ClassAlarm - Simple Class Management for GIKI</p>
+        </div>
+    </footer>
+</body>
+</html>

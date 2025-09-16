@@ -1,0 +1,88 @@
+{% extends 'webapp/base.html' %}
+
+{% block title %}Create Classes - ClassAlarm{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Simple Create Class Form -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-bold mb-4">📝 Create New Class</h2>
+        
+        <form method="post" class="space-y-3">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-3">
+                <select name="subject" required class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Subject</option>
+                    <option value="se221">SE221</option>
+                    <option value="cs221">CS221</option>
+                    <option value="ee201">EE201</option>
+                    <option value="math101">MATH101</option>
+                    <option value="phy201">PHY201</option>
+                    <option value="is301">IS301</option>
+                </select>
+                <select name="venue" required class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Venue</option>
+                    <option value="acb-lh1">ACB-LH1</option>
+                    <option value="acb-lh2">ACB-LH2</option>
+                    <option value="acb-lh3">ACB-LH3</option>
+                    <option value="acb-lh4">ACB-LH4</option>
+                    <option value="acb-lh5">ACB-LH5</option>
+                    <option value="acb-lh6">ACB-LH6</option>
+                    <option value="acb-lh7">ACB-LH7</option>
+                    <option value="fsce-lh1">FSCE-LH1</option>
+                    <option value="fsce-lh2">FSCE-LH2</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <input type="date" name="date" required value="{% now 'Y-m-d' %}"
+                       class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="time" name="time" required
+                       class="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <textarea name="note" rows="2" placeholder="Note for students (optional)"
+                          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                Create Class
+            </button>
+        </form>
+    </div>
+
+    <!-- Your Classes -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-bold mb-4">📚 Your Classes</h2>
+        {% if classes %}
+            <div class="space-y-3">
+                {% for class in classes %}
+                    <div class="border rounded p-3 hover:bg-gray-50">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h3 class="font-medium">{{ class.get_subject_display }}</h3>
+                                <div class="text-sm text-gray-600">
+                                    📍 {{ class.get_venue_display }} • 📅 {{ class.date }} • 🕐 {{ class.time }}
+                                </div>
+                                {% if class.note %}
+                                    <p class="text-sm text-gray-500 mt-1">{{ class.note }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="{% url 'admin:classes_classschedule_change' class.id %}" 
+                                   class="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200">
+                                    Edit
+                                </a>
+                                <a href="{% url 'admin:classes_classschedule_delete' class.id %}" 
+                                   class="text-xs px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 text-center py-6">No classes created yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

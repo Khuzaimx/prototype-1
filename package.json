@@ -1,0 +1,33 @@
+{
+  "name": "classalarm-cross-platform",
+  "version": "1.0.0",
+  "description": "Cross-platform class management and alarm system",
+  "main": "standalone.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve .",
+    "build": "echo 'No build required - static files only'",
+    "deploy": "echo 'Deploy all files to HTTPS server'"
+  },
+  "keywords": [
+    "class-management",
+    "alarm",
+    "pwa",
+    "react",
+    "cross-platform",
+    "education"
+  ],
+  "author": "ClassAlarm Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/classalarm.git"
+  },
+  "homepage": "https://your-domain.com/standalone.html"
+}
